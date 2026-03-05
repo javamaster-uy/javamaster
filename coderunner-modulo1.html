@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ejercicios Prácticos — Módulo 1 | JavaMaster</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Trebuchet MS',Georgia,serif;background:#f3f4f6;min-height:100vh;}
+code{font-family:'Courier New',monospace;background:#f3f4f6;padding:1px 4px;border-radius:3px;font-size:13px;}
+pre{font-family:'Courier New',monospace;}
+button{cursor:pointer;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:6px;}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const QUIZ_TITLE = "Ejercicios Prácticos — Módulo 1";
+const QUIZ_SUBTITLE = "Módulo 1 — JavaMaster";
+
+const EXERCISES = [
+  {
+    id:1, title:"Pregunta 1", points:1.0, penaltySystem:"10, 20, ...",
+    description:`Escribe una función en Java llamada <code>esNegativo</code> que tome un número entero como parámetro y devuelva <code>true</code> si el número es negativo y <code>false</code> si no lo es.`,
+    signature:`public static boolean esNegativo(int numero) {\n    // Tu código aquí\n}`,
+    defaultCode:`public static boolean esNegativo(int numero) {\n    \n}`,
+    tests:[
+      { call:`int valor = -5;\nboolean resultado = esNegativo(valor);\nif (resultado) {\n    System.out.println(valor + " es negativo.");\n} else {\n    System.out.println(valor + " no es negativo.");\n}`, expectedOutput:"-5 es negativo." },
+      { call:`int valor = 8;\nboolean resultado = esNegativo(valor);\nif (resultado) {\n    System.out.println(valor + " es negativo.");\n} else {\n    System.out.println(valor + " no es negativo.");\n}`, expectedOutput:"8 no es negativo." },
+      { call:`int valor = 0;\nboolean resultado = esNegativo(valor);\nif (resultado) {\n    System.out.println(valor + " es negativo.");\n} else {\n    System.out.println(valor + " no es negativo.");\n}`, expectedOutput:"0 no es negativo." },
+    ]
+  },
+  {
+    id:2, title:"Pregunta 2", points:1.0, penaltySystem:"10, 20, ...",
+    description:`Escribe una función en Java llamada <code>calcularCubo</code> que tome un número entero como parámetro y devuelva el cubo de ese número (número elevado a la 3).`,
+    signature:`public static int calcularCubo(int numero) {\n    // Tu código aquí\n}`,
+    defaultCode:`public static int calcularCubo(int numero) {\n    \n}`,
+    tests:[
+      { call:`int resultado = calcularCubo(3);\nSystem.out.println("El cubo de 3 es: " + resultado);`, expectedOutput:"El cubo de 3 es: 27" },
+      { call:`int resultado = calcularCubo(5);\nSystem.out.println("El cubo de 5 es: " + resultado);`, expectedOutput:"El cubo de 5 es: 125" },
+      { call:`int resultado = calcularCubo(2);\nSystem.out.println("El cubo de 2 es: " + resultado);`, expectedOutput:"El cubo de 2 es: 8" },
+    ]
+  },
+  {
+    id:3, title:"Pregunta 3", points:1.0, penaltySystem:"10, 20, ...",
+    description:`Escribe una función en Java llamada <code>sumarDigitos</code> que tome un número entero positivo como parámetro y devuelva la suma de sus dígitos.<br/><br/>
+<strong>Ejemplo:</strong> 1234 → 1+2+3+4 = 10.<br/>
+⚠️ Usá el operador <code>%</code> para obtener el último dígito y <code>/</code> para reducir el número.<br/>
+⚠️ Repetí mientras el número sea mayor a 0.`,
+    signature:`public static int sumarDigitos(int numero) {\n    // Tu código aquí\n}`,
+    defaultCode:`public static int sumarDigitos(int numero) {\n    \n}`,
+    tests:[
+      { call:`int valor = 1234;\nint resultado = sumarDigitos(valor);\nSystem.out.println("La suma de dígitos de " + valor + " es: " + resultado);`, expectedOutput:"La suma de dígitos de 1234 es: 10" },
+      { call:`int valor = 567;\nint resultado = sumarDigitos(valor);\nSystem.out.println("La suma de dígitos de " + valor + " es: " + resultado);`, expectedOutput:"La suma de dígitos de 567 es: 18" },
+      { call:`int valor = 9;\nint resultado = sumarDigitos(valor);\nSystem.out.println("La suma de dígitos de " + valor + " es: " + resultado);`, expectedOutput:"La suma de dígitos de 9 es: 9" },
+    ]
+  },
+  {
+    id:4, title:"Pregunta 4", points:1.0, penaltySystem:"10, 20, ...",
+    description:`Escribe una función en Java llamada <code>esBisiesto</code> que tome un número entero (año) como parámetro y devuelva <code>true</code> si el año es bisiesto y <code>false</code> si no lo es.<br/><br/>
+Un año es bisiesto si:<br/>
+• Es divisible por 4 <strong>Y</strong> no es divisible por 100, <strong>O</strong><br/>
+• Es divisible por 400.`,
+    signature:`public static boolean esBisiesto(int anio) {\n    // Tu código aquí\n}`,
+    defaultCode:`public static boolean esBisiesto(int anio) {\n    \n}`,
+    tests:[
+      { call:`int anio = 2024;\nboolean resultado = esBisiesto(anio);\nif (resultado) {\n    System.out.println(anio + " es bisiesto.");\n} else {\n    System.out.println(anio + " no es bisiesto.");\n}`, expectedOutput:"2024 es bisiesto." },
+      { call:`int anio = 1900;\nboolean resultado = esBisiesto(anio);\nif (resultado) {\n    System.out.println(anio + " es bisiesto.");\n} else {\n    System.out.println(anio + " no es bisiesto.");\n}`, expectedOutput:"1900 no es bisiesto." },
+      { call:`int anio = 2000;\nboolean resultado = esBisiesto(anio);\nif (resultado) {\n    System.out.println(anio + " es bisiesto.");\n} else {\n    System.out.println(anio + " no es bisiesto.");\n}`, expectedOutput:"2000 es bisiesto." },
+    ]
+  },
+  {
+    id:5, title:"Pregunta 5", points:1.0, penaltySystem:"10, 20, ...",
+    description:`Escribe una función en Java llamada <code>calcularAreaRectangulo</code> que tome dos números enteros como parámetros (<strong>base</strong> y <strong>altura</strong>) y devuelva el área del rectángulo como un <code>double</code>.<br/><br/>
+Fórmula: <strong>Área = base × altura</strong>.`,
+    signature:`public static double calcularAreaRectangulo(int base, int altura) {\n    // Tu código aquí\n}`,
+    defaultCode:`public static double calcularAreaRectangulo(int base, int altura) {\n    \n}`,
+    tests:[
+      { call:`int base = 5, altura = 3;\ndouble resultado = calcularAreaRectangulo(base, altura);\nSystem.out.println("El área del rectángulo de base " + base + " y altura " + altura + " es: " + resultado);`, expectedOutput:"El área del rectángulo de base 5 y altura 3 es: 15.0" },
+      { call:`int base = 10, altura = 4;\ndouble resultado = calcularAreaRectangulo(base, altura);\nSystem.out.println("El área del rectángulo de base " + base + " y altura " + altura + " es: " + resultado);`, expectedOutput:"El área del rectángulo de base 10 y altura 4 es: 40.0" },
+    ]
+  },
+  {
+    id:6, title:"Pregunta 6", points:1.0, penaltySystem:"10, 20, ...",
+    description:`Escribe una función en Java llamada <code>mayorDeTres</code> que tome tres números enteros como parámetros (<strong>a</strong>, <strong>b</strong> y <strong>c</strong>) y devuelva el mayor de los tres.<br/><br/>
+⚠️ No uses <code>Math.max()</code>, implementá la lógica con <code>if/else</code>.`,
+    signature:`public static int mayorDeTres(int a, int b, int c) {\n    // Tu código aquí\n}`,
+    defaultCode:`public static int mayorDeTres(int a, int b, int c) {\n    \n}`,
+    tests:[
+      { call:`int resultado = mayorDeTres(3, 7, 5);\nSystem.out.println("El mayor es: " + resultado);`, expectedOutput:"El mayor es: 7" },
+      { call:`int resultado = mayorDeTres(10, 2, 8);\nSystem.out.println("El mayor es: " + resultado);`, expectedOutput:"El mayor es: 10" },
+      { call:`int resultado = mayorDeTres(1, 1, 1);\nSystem.out.println("El mayor es: " + resultado);`, expectedOutput:"El mayor es: 1" },
+    ]
+  }
+];
+
+const PENALTY_STEPS=[0,10,20,30,40,50];
+const TOTAL_TIME=2*60*60;
+let timeLeft=TOTAL_TIME;
+let cur=0;
+let codes=EXERCISES.map(e=>e.defaultCode);
+let penalties=EXERCISES.map(()=>0);
+let results=EXERCISES.map(()=>null);
+let feedbacks=EXERCISES.map(()=>null);
+let locked=EXERCISES.map(()=>false);
+let history=EXERCISES.map(()=>[]);
+let checking=false;
+let timerInterval=null;
+
+const fmt=s=>`${String(Math.floor(s/3600)).padStart(2,"0")}:${String(Math.floor((s%3600)/60)).padStart(2,"0")}:${String(s%60).padStart(2,"0")}`;
+const fmtDate=()=>{const d=new Date();return d.toLocaleDateString("es-UY",{weekday:"long",day:"numeric",month:"long",year:"numeric"})+", "+d.toLocaleTimeString("es-UY",{hour:"2-digit",minute:"2-digit"});};
+
+function getTotal(){
+  return EXERCISES.reduce((a,e,i)=>results[i]?.passed?a+(e.points*(1-penalties[i]/100)):a,0);
+}
+
+async function evaluateJavaWithAI(userCode, exercise) {
+  const testBlock = exercise.tests.map((t,i)=>
+    `Test ${i+1}:\n  Code: ${t.call.replace(/\n/g," ")}\n  Expected stdout: "${t.expectedOutput}"`
+  ).join("\n\n");
+  const prompt = `You are simulating the Moodle CodeRunner Java plugin (javac + java).
+The student wrote only the body of this method:
+${exercise.signature.replace(/\n/g," ")}
+STUDENT CODE:
+${userCode}
+The test harness wraps it in a class and runs:
+${testBlock}
+If compile error: set compilable=false, syntaxErrors = real javac messages like "__tester__.java:3: error: ..."
+If compiles: trace execution carefully and report exact stdout for each test.
+For logicErrors use real CodeRunner English style: "Wrong answer: expected <X> but got <Y>"
+Respond ONLY with JSON (no markdown):
+{"compilable":true,"syntaxErrors":[],"tests":[{"pass":true,"gotOutput":"..."}],"logicErrors":[]}`;
+  const r = await fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1200,messages:[{role:"user",content:prompt}]})
+  });
+  const data=await r.json();
+  const text=data.content.map(b=>b.text||"").join("");
+  return JSON.parse(text.replace(/```json|```/g,"").trim());
+}
+
+function highlightJava(code){
+  return code.split("\n").map(line=>{
+    let e=line.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    e=e.replace(/"([^"\\]|\\.)*"/g,m=>`<span style="color:#ce9178">${m}</span>`);
+    e=e.replace(/(\/\/.*$)/g,m=>`<span style="color:#6a9955">${m}</span>`);
+    e=e.replace(/\b(public|static|void|int|double|boolean|String|return|if|else|for|while|new|class|true|false|null|char|long|float)\b/g,m=>`<span style="color:#569cd6">${m}</span>`);
+    e=e.replace(/\b(\d+\.?\d*)\b/g,m=>`<span style="color:#b5cea8">${m}</span>`);
+    return `<div style="min-height:20px">${e}</div>`;
+  }).join("");
+}
+
+function renderStart(){
+  document.getElementById("app").innerHTML=`
+  <div style="background:#fff;min-height:100vh;">
+    <div style="background:#1e3a8a;padding:12px 32px;display:flex;align-items:center;gap:16px;">
+      <div style="background:#F89820;border-radius:4px;padding:4px 10px;font-size:12px;font-weight:700;color:#000;">JavaMaster</div>
+      <span style="color:#93c5fd;font-size:13px;">Entorno Virtual de Aprendizaje</span>
+    </div>
+    <div style="max-width:900px;margin:0 auto;padding:32px 24px;">
+      <div style="font-size:12px;color:#6b7280;margin-bottom:16px;">JavaMaster › Módulo 1 › <strong style="color:#F89820;">${QUIZ_TITLE}</strong></div>
+      <h1 style="font-size:24px;font-weight:700;color:#111827;margin-bottom:4px;">${QUIZ_TITLE}</h1>
+      <p style="color:#6b7280;font-size:14px;margin-bottom:24px;">${QUIZ_SUBTITLE}</p>
+      <div style="border:1px solid #e5e7eb;border-radius:8px;margin-bottom:24px;overflow:hidden;">
+        <div style="background:#f9fafb;padding:12px 20px;border-bottom:1px solid #e5e7eb;display:flex;gap:40px;flex-wrap:wrap;">
+          ${[["Preguntas","6"],["Puntos disponibles","6,00"],["Calificación máxima","100,00"],["Método de calificación","Calificación más alta"],["Límite de tiempo","2 horas"]].map(([k,v])=>`
+          <div>
+            <div style="font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.5px;">${k}</div>
+            <div style="font-size:14px;font-weight:600;color:#111827;">${v}</div>
+          </div>`).join("")}
+        </div>
+      </div>
+      <div style="margin-bottom:32px;">
+        <button id="btnStart" style="background:#1a56db;color:#fff;border:none;border-radius:6px;padding:10px 28px;font-size:14px;font-weight:700;">Comenzar cuestionario</button>
+      </div>
+    </div>
+  </div>`;
+  document.getElementById("btnStart").onclick=startQuiz;
+}
+
+function startQuiz(){
+  codes=EXERCISES.map(e=>e.defaultCode);
+  penalties=EXERCISES.map(()=>0);
+  results=EXERCISES.map(()=>null);
+  feedbacks=EXERCISES.map(()=>null);
+  locked=EXERCISES.map(()=>false);
+  history=EXERCISES.map(()=>[]);
+  timeLeft=TOTAL_TIME;
+  cur=0;
+  if(timerInterval)clearInterval(timerInterval);
+  timerInterval=setInterval(()=>{
+    timeLeft--;
+    if(timeLeft<=0){clearInterval(timerInterval);renderFinished();}
+    updateTimer();
+  },1000);
+  renderQuiz();
+}
+
+function updateTimer(){
+  const el=document.getElementById("timerDisplay");
+  if(el)el.textContent=fmt(timeLeft);
+  const el2=document.getElementById("timerBox");
+  if(el2)el2.style.background=timeLeft<600?"#dc2626":timeLeft<1800?"#d97706":"#065f46";
+}
+
+function renderQuiz(){
+  const ex=EXERCISES[cur];
+  const pen=penalties[cur];
+  const earned=results[cur]?.passed?(ex.points*(1-pen/100)):null;
+  const fb=feedbacks[cur];
+  const total=getTotal();
+  const pctTime=((TOTAL_TIME-timeLeft)/TOTAL_TIME)*100;
+
+  const navBtns=EXERCISES.map((_,i)=>{
+    const bg=i===cur?"#1a56db":results[i]?.passed?"#059669":history[i]?.length?"#dc2626":"#e5e7eb";
+    const color=i===cur||results[i]?.passed||history[i]?.length?"#fff":"#374151";
+    const outline=i===cur?"3px solid #93c5fd":"none";
+    return `<button onclick="goTo(${i})" style="width:36px;height:36px;border-radius:4px;border:none;font-weight:700;font-size:13px;background:${bg};color:${color};outline:${outline};">${i+1}</button>`;
+  }).join("");
+
+  const histHtml=history[cur].length===0
+    ?`<div style="padding:12px 16px;font-size:12px;color:#9ca3af;">Sin intentos aún.</div>`
+    :`<div style="padding:8px 12px;display:flex;flex-direction:column;gap:4px;max-height:200px;overflow-y:auto;">${
+      history[cur].map((a)=>{
+        const ok=a.fb?.type==="success";
+        return `<div style="display:flex;align-items:center;justify-content:space-between;background:${ok?"#f0fdf4":"#fef2f2"};border:1px solid ${ok?"#bbf7d0":"#fecaca"};border-radius:5px;padding:6px 10px;">
+          <div>
+            <div style="font-size:12px;font-weight:700;color:${ok?"#059669":"#dc2626"};">Intento #${a.attemptN} ${ok?"✅":"❌"}</div>
+            <div style="font-size:10px;color:#6b7280;">pen: -${PENALTY_STEPS[Math.min(a.attemptN-1,PENALTY_STEPS.length-1)]}%</div>
+          </div>
+        </div>`;
+      }).join("")
+    }</div>`;
+
+  const testsTableHtml=`<table style="width:100%;border-collapse:collapse;font-size:12px;">
+    <thead><tr style="background:#f9fafb;">
+      <th style="border:1px solid #e5e7eb;padding:6px 12px;text-align:left;font-weight:700;">Prueba</th>
+      <th style="border:1px solid #e5e7eb;padding:6px 12px;text-align:left;font-weight:700;">Resultado</th>
+    </tr></thead>
+    <tbody>${ex.tests.map(t=>`<tr>
+      <td style="border:1px solid #e5e7eb;padding:5px 12px;font-family:monospace;white-space:pre-wrap;font-size:11px;">${t.call.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</td>
+      <td style="border:1px solid #e5e7eb;padding:5px 12px;font-family:monospace;">${t.expectedOutput}</td>
+    </tr>`).join("")}</tbody>
+  </table>`;
+
+  let fbHtml="";
+  if(fb){
+    if(fb.type==="syntax"){
+      fbHtml=`<div style="border-radius:6px;overflow:hidden;border:1px solid #f87171;margin:0 20px 16px;">
+        <div style="background:#dc2626;padding:8px 14px;color:#fff;font-weight:700;font-size:13px;">Error(es) de sintaxis</div>
+        <div style="background:#fef2f2;padding:14px 16px;"><pre style="margin:0;font-size:12px;color:#7f1d1d;white-space:pre-wrap;line-height:1.7;">${(fb.syntaxErrors||[]).join("\n")}</pre></div>
+        <div style="background:#fee2e2;border-top:1px solid #fca5a5;padding:6px 14px;font-size:11px;color:#991b1b;">Penalización: <strong>-${fb.penalty}%</strong> — Intento #${fb.attempt}</div>
+      </div>`;
+    } else {
+      const ok=fb.type==="success";
+      const bd=ok?"#86efac":"#fca5a5";
+      const bg=ok?"#f0fdf4":"#fef2f2";
+      const tc=ok?"#166534":"#991b1b";
+      const rows=(fb.testRows||[]).map(r=>`<tr style="background:${r.pass?(ok?"#f0fdf4":"#f8fff8"):"#fff5f5"};">
+        <td style="border:1px solid ${bd};padding:4px 8px;font-family:monospace;white-space:pre-wrap;font-size:10px;">${r.call.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</td>
+        <td style="border:1px solid ${bd};padding:4px 8px;font-family:monospace;">${r.expected}</td>
+        <td style="border:1px solid ${bd};padding:4px 8px;font-family:monospace;color:${r.pass?"inherit":"#dc2626"};font-weight:${r.pass?"normal":"600"};">${r.got}</td>
+        <td style="border:1px solid ${bd};padding:4px 8px;text-align:center;">${r.pass?"✅":"❌"}</td>
+      </tr>`).join("");
+      const logicHtml=(!ok&&fb.logicErrors?.length>0)?`<div style="border-bottom:1px solid ${bd};">
+        <div style="background:#1e1e1e;padding:7px 14px;color:#f87171;font-weight:700;font-size:12px;font-family:monospace;">Wrong answer</div>
+        <pre style="margin:0;padding:12px 16px;font-size:11px;font-family:'Courier New',monospace;color:#7f1d1d;background:#fef2f2;white-space:pre-wrap;line-height:1.8;">${fb.logicErrors.join("\n")}</pre>
+      </div>`:"";
+      const bottomHtml=ok
+        ?`<div style="background:#22c55e;color:#fff;border-radius:3px;padding:2px 10px;font-size:12px;font-weight:700;display:inline-block;">Correcta</div>
+          <div style="font-size:11px;color:#166534;">Puntos: <strong>${earned?.toFixed(2)}/${ex.points.toFixed(2)}</strong></div>`
+        :`<div style="font-size:11px;color:#b91c1c;">Penalización: <strong>-${fb.penalty}%</strong> — Intento #${fb.attempt}</div>`;
+      fbHtml=`<div style="background:${bg};border:1px solid ${bd};border-radius:6px;overflow:hidden;margin:0 20px 16px;">
+        <div style="padding:10px 14px;border-bottom:1px solid ${bd};">
+          <div style="font-weight:700;color:${tc};font-size:13px;margin-bottom:8px;">${ok?"✅ Todas las pruebas superadas.":"❌ Algunas pruebas fallaron:"}</div>
+          <table style="width:100%;border-collapse:collapse;font-size:11px;">
+            <thead><tr style="background:${ok?"#dcfce7":"#fee2e2"};">
+              <th style="border:1px solid ${bd};padding:5px 8px;text-align:left;font-weight:700;">Prueba</th>
+              <th style="border:1px solid ${bd};padding:5px 8px;text-align:left;font-weight:700;">Esperado</th>
+              <th style="border:1px solid ${bd};padding:5px 8px;text-align:left;font-weight:700;">Conseguido</th>
+              <th style="border:1px solid ${bd};padding:5px 8px;font-weight:700;"></th>
+            </tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+        ${logicHtml}
+        <div style="padding:8px 14px;display:flex;align-items:center;justify-content:space-between;">${bottomHtml}</div>
+      </div>`;
+    }
+  }
+
+  const checkBtnStyle=locked[cur]?"background:#9ca3af":checking?"background:#6b7280":"background:#1a56db";
+  const checkBtnText=checking?`<span class="spinner"></span>Evaluando...`:locked[cur]?"✓ Completado":"Comprobar";
+  const headerBg=results[cur]?.passed?"#f0fdf4":results[cur]!==null?"#fef2f2":"#fff";
+  const badgeBg=results[cur]?.passed?"#059669":results[cur]!==null?"#dc2626":"#1a56db";
+  const badgeText=results[cur]?.passed?"Correcta":results[cur]!==null?"Incorrecta":ex.title;
+
+  document.getElementById("app").innerHTML=`
+  <div style="font-family:'Trebuchet MS',Georgia,serif;min-height:100vh;background:#f3f4f6;">
+    <div style="background:#1e3a8a;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="background:#F89820;border-radius:4px;padding:4px 10px;font-size:12px;font-weight:700;color:#000;">JavaMaster</div>
+        <span style="color:#93c5fd;font-size:12px;">Entorno Virtual</span>
+      </div>
+      <div style="color:#fff;font-weight:700;font-size:13px;">${QUIZ_TITLE}</div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div id="timerBox" style="background:${timeLeft<600?"#dc2626":timeLeft<1800?"#d97706":"#065f46"};border-radius:6px;padding:6px 16px;text-align:center;">
+          <div id="timerDisplay" style="color:#fff;font-weight:800;font-size:18px;">${fmt(timeLeft)}</div>
+          <div style="color:rgba(255,255,255,.7);font-size:10px;">Tiempo restante</div>
+        </div>
+      </div>
+    </div>
+    <div style="height:3px;background:#dbeafe;"><div style="height:100%;background:#1a56db;width:${pctTime}%;transition:width 1s linear;"></div></div>
+
+    <div style="max-width:1200px;margin:0 auto;padding:20px 16px;display:grid;grid-template-columns:240px 1fr;gap:20px;">
+      <div>
+        <div style="background:#fff;border-radius:8px;border:1px solid #e5e7eb;overflow:hidden;margin-bottom:12px;">
+          <div style="background:#1e3a8a;padding:10px 16px;color:#fff;font-size:12px;font-weight:700;">Navegación</div>
+          <div style="padding:12px 16px;display:flex;flex-wrap:wrap;gap:6px;">${navBtns}</div>
+        </div>
+        <div style="background:#fff;border-radius:8px;border:1px solid #e5e7eb;padding:12px 16px;margin-bottom:12px;">
+          <div style="font-size:12px;font-weight:700;color:#374151;margin-bottom:8px;">Puntaje acumulado</div>
+          <div style="font-size:28px;font-weight:800;color:#1e3a8a;">${total.toFixed(2)}<span style="font-size:14px;color:#6b7280;">/6.00</span></div>
+          <div style="height:6px;background:#e5e7eb;border-radius:3px;margin-top:8px;"><div style="height:100%;background:${total>=3?"#059669":"#1a56db"};border-radius:3px;width:${(total/6)*100}%;"></div></div>
+          <div style="font-size:11px;color:#6b7280;margin-top:4px;">Mínimo para aprobar: 3.00</div>
+        </div>
+        <div style="background:#fff;border-radius:8px;border:1px solid #e5e7eb;overflow:hidden;margin-bottom:12px;">
+          <div style="background:#374151;padding:8px 16px;color:#fff;font-size:12px;font-weight:700;">
+            Historial — Pregunta ${cur+1} (${history[cur].length} intento(s))
+          </div>
+          ${histHtml}
+        </div>
+        <button onclick="finalizeQuiz()" style="background:#059669;color:#fff;border:none;border-radius:6px;padding:9px 0;font-size:12px;font-weight:700;width:100%;">Finalizar revisión</button>
+      </div>
+
+      <div>
+        <div style="background:#fff;border-radius:8px;border:1px solid #e5e7eb;overflow:hidden;">
+          <div style="padding:14px 20px;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center;background:${headerBg};">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span style="background:${badgeBg};color:#fff;border-radius:4px;padding:2px 10px;font-size:12px;font-weight:700;">${badgeText}</span>
+              <span style="font-size:12px;color:#6b7280;">Se puntúa ${earned!==null?earned.toFixed(2):ex.points.toFixed(2)} sobre ${ex.points.toFixed(2)}</span>
+            </div>
+            <div style="font-size:12px;color:#6b7280;">
+              Penalización: <strong>${ex.penaltySystem} %</strong>
+              ${pen>0?`<span style="color:#dc2626;margin-left:8px;">Actual: -${pen}%</span>`:""}
+            </div>
+          </div>
+
+          <div style="padding:16px 20px;border-bottom:1px solid #e5e7eb;font-size:14px;color:#374151;line-height:1.7;">${ex.description}</div>
+
+          <div style="padding:0 20px 12px;border-bottom:1px solid #e5e7eb;">
+            <div style="font-size:12px;font-weight:700;color:#374151;margin-bottom:6px;">Firma de la función:</div>
+            <pre style="background:#f8f9fa;border:1px solid #e5e7eb;border-radius:4px;padding:8px 12px;font-size:12px;color:#1e3a8a;font-family:'Courier New',monospace;">${ex.signature.replace(/</g,"&lt;")}</pre>
+          </div>
+
+          <div style="padding:12px 20px;border-bottom:1px solid #e5e7eb;">
+            <div style="font-size:13px;font-weight:700;color:#374151;margin-bottom:8px;">Por ejemplo:</div>
+            ${testsTableHtml}
+          </div>
+
+          <div style="padding:12px 20px 0;">
+            <div style="font-size:13px;font-weight:700;color:#374151;margin-bottom:8px;">
+              Respuesta: <span style="font-weight:400;color:#6b7280;">(sistema de penalización: ${ex.penaltySystem} %)</span>
+            </div>
+            <button onclick="resetCode()" ${locked[cur]?"disabled":""} style="background:#374151;color:#fff;border:none;border-radius:5px;padding:7px 18px;font-size:12px;font-weight:700;margin-bottom:10px;opacity:${locked[cur]?0.5:1};">Reiniciar respuesta</button>
+            <div style="border:1px solid #3e3e42;border-radius:6px;overflow:hidden;margin-bottom:12px;background:#1e1e1e;position:relative;">
+              <div style="background:#252526;border-bottom:1px solid #3e3e42;padding:5px 14px;font-size:11px;color:#9cdcfe;font-family:monospace;display:flex;justify-content:space-between;">
+                <span>Java</span><span style="color:#6b7280;font-size:10px;">${locked[cur]?"🔒 Bloqueado":""}</span>
+              </div>
+              <div style="display:flex;position:relative;min-height:180px;">
+                <div id="lineNums" style="background:#1e1e1e;border-right:1px solid #3e3e42;padding:8px 0;min-width:44px;text-align:right;user-select:none;flex-shrink:0;"></div>
+                <div id="highlight" aria-hidden="true" style="position:absolute;left:44px;top:0;right:0;bottom:0;padding:8px 12px;font-size:12px;font-family:'Courier New',monospace;line-height:20px;pointer-events:none;white-space:pre-wrap;word-break:break-all;color:#d4d4d4;z-index:1;"></div>
+                <textarea id="codeArea" spellcheck="false" ${locked[cur]?"disabled":""} style="flex:1;border:none;outline:none;padding:8px 12px;font-size:12px;font-family:'Courier New',monospace;line-height:20px;resize:none;min-height:180px;background:transparent;color:transparent;caret-color:#fff;z-index:2;position:relative;white-space:pre;">${codes[cur]}</textarea>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding:0 20px 16px;display:flex;align-items:center;gap:12px;">
+            <button id="checkBtn" onclick="handleCheck()" ${locked[cur]||checking?"disabled":""} style="${checkBtnStyle};color:#fff;border:none;border-radius:5px;padding:9px 24px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;">${checkBtnText}</button>
+            ${checking?`<span style="font-size:12px;color:#6b7280;">Running Java...</span>`:""}
+          </div>
+
+          ${fbHtml}
+
+          <div style="padding:12px 20px;border-top:1px solid #e5e7eb;display:flex;justify-content:space-between;background:#f9fafb;">
+            <button onclick="goTo(${Math.max(0,cur-1)})" ${cur===0?"disabled":""} style="background:${cur===0?"#e5e7eb":"#374151"};color:${cur===0?"#9ca3af":"#fff"};border:none;border-radius:5px;padding:7px 18px;font-size:12px;font-weight:700;">← Anterior</button>
+            <span style="font-size:13px;color:#6b7280;align-self:center;">Ejercicio ${cur+1} de ${EXERCISES.length}</span>
+            <button onclick="goTo(${Math.min(EXERCISES.length-1,cur+1)})" ${cur===EXERCISES.length-1?"disabled":""} style="background:${cur===EXERCISES.length-1?"#e5e7eb":"#1a56db"};color:${cur===EXERCISES.length-1?"#9ca3af":"#fff"};border:none;border-radius:5px;padding:7px 18px;font-size:12px;font-weight:700;">Siguiente →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+  updateEditor();
+  document.getElementById("codeArea").addEventListener("input",e=>{
+    if(locked[cur])return;
+    codes[cur]=e.target.value;
+    updateEditor();
+  });
+}
+
+function updateEditor(){
+  const ta=document.getElementById("codeArea");
+  if(!ta)return;
+  const code=codes[cur];
+  const lines=code.split("\n");
+  const ln=document.getElementById("lineNums");
+  if(ln)ln.innerHTML=lines.map((_,i)=>`<div style="padding:0 10px 0 6px;font-size:12px;color:#858585;line-height:20px;font-family:monospace;">${i+1}</div>`).join("");
+  const hl=document.getElementById("highlight");
+  if(hl)hl.innerHTML=highlightJava(code);
+}
+
+function goTo(i){
+  if(i<0||i>=EXERCISES.length)return;
+  cur=i;renderQuiz();
+}
+
+function resetCode(){
+  if(locked[cur])return;
+  codes[cur]=EXERCISES[cur].defaultCode;
+  feedbacks[cur]=null;
+  renderQuiz();
+}
+
+async function handleCheck(){
+  if(locked[cur]||checking)return;
+  checking=true;renderQuiz();
+  const code=codes[cur],ex=EXERCISES[cur];
+  const attemptN=(history[cur]?.length||0)+1;
+  const pi=Math.min(attemptN-1,PENALTY_STEPS.length-1);
+  try{
+    const ev=await evaluateJavaWithAI(code,ex);
+    let newFb;
+    if(!ev.compilable){
+      penalties[cur]=PENALTY_STEPS[pi];
+      newFb={type:"syntax",syntaxErrors:ev.syntaxErrors||[],attempt:attemptN,penalty:PENALTY_STEPS[pi]};
+    }else{
+      const testRows=ev.tests.map((t,i)=>({call:ex.tests[i].call,expected:ex.tests[i].expectedOutput,got:t.gotOutput??"—",pass:t.pass}));
+      const allPass=testRows.every(r=>r.pass);
+      if(!allPass)penalties[cur]=PENALTY_STEPS[pi];
+      results[cur]={passed:allPass,testRows};
+      newFb={type:allPass?"success":"wrong",testRows,logicErrors:ev.logicErrors||[],attempt:attemptN,penalty:allPass?0:PENALTY_STEPS[pi]};
+      if(allPass)locked[cur]=true;
+    }
+    feedbacks[cur]=newFb;
+    history[cur]=[...history[cur],{attemptN,code,fb:newFb,timeLeft}];
+  }catch{
+    feedbacks[cur]={type:"syntax",syntaxErrors:["Error: evaluator unreachable."],attempt:attemptN,penalty:0};
+  }
+  checking=false;renderQuiz();
+}
+
+function finalizeQuiz(){
+  if(timerInterval)clearInterval(timerInterval);
+  renderFinished();
+}
+
+function renderFinished(){
+  const total=getTotal();
+  const passed=total>=3;
+  document.getElementById("app").innerHTML=`
+  <div style="font-family:'Trebuchet MS',Georgia,serif;min-height:100vh;background:#f3f4f6;display:flex;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,.12);padding:40px 52px;max-width:640px;text-align:center;">
+      <div style="font-size:56px;margin-bottom:12px;">${passed?"🎉":"😔"}</div>
+      <h1 style="font-size:26px;font-weight:700;color:${passed?"#059669":"#dc2626"};margin-bottom:4px;">${passed?"¡Aprobado!":"No Aprobado"}</h1>
+      <p style="color:#6b7280;margin-bottom:20px;font-size:13px;">${QUIZ_TITLE}</p>
+      <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:20px;margin-bottom:20px;">
+        <div style="font-size:36px;font-weight:800;color:${passed?"#059669":"#dc2626"};">${total.toFixed(2)}<span style="font-size:18px;color:#6b7280;">/6.00</span></div>
+        <div style="color:#6b7280;font-size:13px;margin-top:4px;">${(total/6*100).toFixed(2)} / 100,00</div>
+      </div>
+      <div style="display:grid;gap:6px;margin-bottom:20px;text-align:left;">
+        ${EXERCISES.map((e,i)=>`
+        <div style="background:${results[i]?.passed?"#f0fdf4":"#fef2f2"};border:1px solid ${results[i]?.passed?"#bbf7d0":"#fecaca"};border-radius:6px;padding:8px 16px;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:13px;font-weight:600;">${e.title} <span style="color:#6b7280;font-weight:400;font-size:12px;">(${history[i].length} intento(s))</span></span>
+          <span style="font-size:13px;font-weight:700;color:${results[i]?.passed?"#059669":"#dc2626"};">${results[i]?.passed?`+${(e.points*(1-penalties[i]/100)).toFixed(2)} pts`:"0,00"}</span>
+        </div>`).join("")}
+      </div>
+      <button onclick="startQuiz()" style="background:#1a56db;color:#fff;border:none;border-radius:6px;padding:10px 24px;font-weight:700;font-size:13px;">Nuevo intento</button>
+    </div>
+  </div>`;
+}
+
+renderStart();
+</script>
+</body>
+</html>
