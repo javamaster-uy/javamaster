@@ -1135,8 +1135,27 @@
     </div>
   </div>
 
+  <!-- MercadoPago SDK -->
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
   <script>
-    // MODAL
+    // ── MercadoPago ──────────────────────────────────────────
+    const MP_PUBLIC_KEY = 'APP_USR-a5816247-e3aa-424f-b4fa-43a6b5e894b6';
+    const MP_ACCESS_TOKEN = 'APP_USR-3242265758694321-030422-ea22eea698ab3bcb0550a50f28a665f3-2126395795';
+    const mp = new MercadoPago(MP_PUBLIC_KEY, { locale: 'es-UY' });
+
+    // Datos de los productos con sus links de Drive
+    const PRODUCTOS = {
+      'Módulo 1: Introducción a Java': {
+        price: 3,
+        pdfLink: '' // se abre al finalizar la compra desde MP
+      },
+      'Curso Completo de Java': {
+        price: 20,
+        pdfLink: ''
+      }
+    };
+
+    // ── MODAL ────────────────────────────────────────────────
     let currentProduct = '';
     let currentPrice = 0;
     let currentPdfLink = '';
@@ -1168,35 +1187,92 @@
       input.value = v.match(/.{1,4}/g)?.join(' ') || v;
     }
 
-    function processPayment() {
-      const name = document.getElementById('modalName').value;
-      const email = document.getElementById('modalEmail').value;
+    // ── PAGO REAL con MercadoPago Checkout Pro ────────────────
+    async function processPayment() {
+      const name = document.getElementById('modalName').value.trim();
+      const email = document.getElementById('modalEmail').value.trim();
       if (!name || !email) {
-        alert('Por favor completa tu nombre y email.');
+        alert('Por favor completá tu nombre y email.');
         return;
       }
-      closeModal();
-      setTimeout(() => {
-        alert(`✅ ¡Compra exitosa!\n\nProducto: ${currentProduct}\nTotal: $${currentPrice} USD\n\nRecibirás tu PDF en ${email} en los próximos minutos.\n\n¡Gracias por confiar en JavaMaster!`);
-        if (currentPdfLink) {
-          window.open(currentPdfLink, '_blank');
+
+      const confirmBtn = document.querySelector('.modal-footer .confirm');
+      confirmBtn.textContent = '⏳ Procesando...';
+      confirmBtn.disabled = true;
+
+      try {
+        // Crear preferencia de pago en MercadoPago
+        const response = await fetch('https://api.mercadopago.com/checkout/preferences', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${MP_ACCESS_TOKEN}`
+          },
+          body: JSON.stringify({
+            items: [{
+              title: currentProduct,
+              quantity: 1,
+              currency_id: 'USD',
+              unit_price: currentPrice
+            }],
+            payer: { name, email },
+            back_urls: {
+              success: 'https://javamaster-uy.github.io/javamaster?status=success',
+              failure: 'https://javamaster-uy.github.io/javamaster?status=failure',
+              pending: 'https://javamaster-uy.github.io/javamaster?status=pending'
+            },
+            auto_return: 'approved',
+            statement_descriptor: 'JAVAMASTER'
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.init_point) {
+          closeModal();
+          // Redirigir al checkout de MercadoPago
+          window.location.href = data.init_point;
+        } else {
+          throw new Error('No se pudo crear la preferencia');
         }
-      }, 200);
+      } catch (err) {
+        confirmBtn.textContent = '🔒 Pagar ahora';
+        confirmBtn.disabled = false;
+        alert('Hubo un problema al conectar con MercadoPago. Intentá de nuevo.');
+        console.error(err);
+      }
     }
 
-    // FAQ TOGGLE
+    // ── Detectar retorno desde MercadoPago ────────────────────
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const status = params.get('status');
+      if (status === 'success') {
+        setTimeout(() => {
+          alert('✅ ¡Pago confirmado! Revisá tu email para acceder al material. ¡Gracias por confiar en JavaMaster!');
+        }, 500);
+      } else if (status === 'failure') {
+        setTimeout(() => {
+          alert('❌ El pago no se completó. Podés intentarlo de nuevo cuando quieras.');
+        }, 500);
+      } else if (status === 'pending') {
+        setTimeout(() => {
+          alert('⏳ Tu pago está pendiente de confirmación. Te avisaremos por email cuando se acredite.');
+        }, 500);
+      }
+    });
+
+    // ── FAQ TOGGLE ────────────────────────────────────────────
     function toggleFaq(btn) {
       const item = btn.parentElement;
       item.classList.toggle('open');
     }
 
-    // SCROLL REVEAL
+    // ── SCROLL REVEAL ─────────────────────────────────────────
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
+        if (entry.isIntersecting) entry.target.classList.add('visible');
       });
     }, { threshold: 0.1 });
     reveals.forEach(el => observer.observe(el));
