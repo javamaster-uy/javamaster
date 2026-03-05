@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaMaster — Aprende Java desde cero</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Barlow:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #080C10;
+      --surface: #0D1117;
+      --card: #161B22;
+      --border: #21262D;
+      --text: #E6EDF3;
+      --muted: #7D8590;
+      --java-orange: #F89820;
+      --java-red: #E64A19;
+      --accent: #58A6FF;
+      --green: #3FB950;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ANIMATED BG GRID */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(88,166,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(88,166,255,0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 5%;
+      background: rgba(8,12,16,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--java-orange);
+      letter-spacing: -1px;
+    }
+    .logo span { color: var(--text); }
+    nav ul { list-style: none; display: flex; gap: 32px; }
+    nav ul a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    nav ul a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--java-orange);
+      color: #000 !important;
+      padding: 8px 20px;
+      border-radius: 6px;
+      font-weight: 700 !important;
+      transition: opacity 0.2s !important;
+    }
+    .nav-cta:hover { opacity: 0.85; color: #000 !important; }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 120px 5% 80px;
+      z-index: 1;
+      overflow: hidden;
+    }
+    .hero-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(248,152,32,0.15) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(248,152,32,0.1);
+      border: 1px solid rgba(248,152,32,0.3);
+      color: var(--java-orange);
+      padding: 6px 16px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      animation: fadeUp 0.6s ease both;
+    }
+    .badge::before { content: '●'; font-size: 0.5rem; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    h1 {
+      font-family: 'Barlow', sans-serif;
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -2px;
+      margin-bottom: 24px;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    h1 .highlight {
+      background: linear-gradient(135deg, var(--java-orange), var(--java-red));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.7;
+      margin-bottom: 40px;
+      font-weight: 300;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+    .hero-btns {
+      display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--java-orange), var(--java-red));
+      color: #fff;
+      padding: 16px 36px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      border: none; cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 24px rgba(248,152,32,0.3);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(248,152,32,0.45);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      padding: 16px 36px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--muted); background: var(--card); }
+
+    .hero-stats {
+      display: flex; gap: 48px; margin-top: 64px;
+      animation: fadeUp 0.6s 0.4s ease both;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-size: 2rem; font-weight: 900;
+      color: var(--java-orange);
+      font-family: 'Space Mono', monospace;
+    }
+    .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* CODE SNIPPET FLOATING */
+    .code-float {
+      position: absolute;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      line-height: 1.6;
+      pointer-events: none;
+    }
+    .code-float.left { left: 4%; top: 35%; animation: float 6s ease-in-out infinite; }
+    .code-float.right { right: 4%; top: 45%; animation: float 6s 2s ease-in-out infinite; }
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-14px); }
+    }
+    .code-float .kw { color: var(--accent); }
+    .code-float .str { color: var(--green); }
+    .code-float .cls { color: var(--java-orange); }
+
+    /* SECTION COMMON */
+    section { position: relative; z-index: 1; }
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--java-orange);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      color: var(--muted);
+      font-size: 1.05rem;
+      font-weight: 300;
+      line-height: 1.7;
+      max-width: 540px;
+    }
+
+    /* MODULES */
+    .modules {
+      padding: 100px 5%;
+      background: var(--surface);
+    }
+    .modules-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 60px;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+    .module-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+      cursor: pointer;
+    }
+    .module-card:hover {
+      border-color: var(--java-orange);
+      transform: translateY(-4px);
+    }
+    .module-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--java-orange), var(--java-red));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .module-card:hover::before { opacity: 1; }
+    .module-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .module-icon {
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+    .module-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .module-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 24px;
+      font-weight: 300;
+    }
+    .module-topics {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 28px;
+    }
+    .topic-tag {
+      background: rgba(88,166,255,0.08);
+      border: 1px solid rgba(88,166,255,0.15);
+      color: var(--accent);
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    .module-footer {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .module-price {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--java-orange);
+    }
+    .module-price span {
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-family: 'Barlow', sans-serif;
+      font-weight: 400;
+    }
+
+    /* VIDEO SECTION */
+    .video-section {
+      padding: 100px 5%;
+      background: var(--bg);
+    }
+    .video-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+      margin-top: 60px;
+    }
+    .video-placeholder {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      aspect-ratio: 16/9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.3s;
+    }
+    .video-placeholder:hover { border-color: var(--java-orange); }
+    .video-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(248,152,32,0.05), rgba(230,74,25,0.05));
+    }
+    .play-btn {
+      width: 64px; height: 64px;
+      background: linear-gradient(135deg, var(--java-orange), var(--java-red));
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative; z-index: 1;
+    }
+    .video-placeholder:hover .play-btn {
+      transform: scale(1.1);
+      box-shadow: 0 0 32px rgba(248,152,32,0.4);
+    }
+    .video-label {
+      font-size: 0.85rem;
+      color: var(--muted);
+      position: relative; z-index: 1;
+      text-align: center;
+      padding: 0 20px;
+    }
+    .video-url-input {
+      position: absolute;
+      bottom: 16px; left: 16px; right: 16px;
+      background: rgba(0,0,0,0.6);
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      text-align: center;
+    }
+    .video-info h3 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+    .video-info p {
+      color: var(--muted);
+      line-height: 1.7;
+      font-weight: 300;
+      margin-bottom: 24px;
+    }
+    .checklist { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .checklist li {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 0.95rem;
+    }
+    .checklist li::before {
+      content: '✓';
+      background: rgba(63,185,80,0.15);
+      color: var(--green);
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* PRICING */
+    .pricing {
+      padding: 100px 5%;
+      background: var(--surface);
+    }
+    .pricing-header { text-align: center; margin-bottom: 60px; }
+    .pricing-header .section-sub { margin: 0 auto; }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .price-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px 32px;
+      position: relative;
+      transition: transform 0.3s;
+    }
+    .price-card:hover { transform: translateY(-6px); }
+    .price-card.featured {
+      border-color: var(--java-orange);
+      background: linear-gradient(180deg, rgba(248,152,32,0.05) 0%, var(--card) 100%);
+    }
+    .featured-badge {
+      position: absolute;
+      top: -12px; left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, var(--java-orange), var(--java-red));
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 16px;
+      border-radius: 50px;
+      white-space: nowrap;
+    }
+    .plan-name {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 0.8rem;
+    }
+    .plan-price {
+      font-family: 'Space Mono', monospace;
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .plan-price sup {
+      font-size: 1.2rem;
+      vertical-align: top;
+      margin-top: 8px;
+    }
+    .plan-price sub {
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-weight: 400;
+    }
+    .plan-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+    .plan-features { list-style: none; display: flex; flex-direction: column; gap: 14px; margin-bottom: 36px; }
+    .plan-features li {
+      font-size: 0.9rem;
+      display: flex; align-items: center; gap: 10px;
+      color: var(--text);
+    }
+    .plan-features li .icon { color: var(--green); font-size: 0.8rem; }
+    .plan-features li.disabled { color: var(--muted); }
+    .plan-features li.disabled .icon { color: var(--border); }
+
+    /* PAYMENT MODAL */
+    .pay-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-family: 'Barlow', sans-serif;
+    }
+    .pay-btn.primary {
+      background: linear-gradient(135deg, var(--java-orange), var(--java-red));
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(248,152,32,0.25);
+    }
+    .pay-btn.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(248,152,32,0.4);
+    }
+    .pay-btn.outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .pay-btn.outline:hover { border-color: var(--muted); background: var(--bg); }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 480px;
+      width: 100%;
+      animation: modalIn 0.3s ease;
+    }
+    @keyframes modalIn {
+      from { opacity:0; transform: scale(0.95) translateY(20px); }
+      to { opacity:1; transform: scale(1) translateY(0); }
+    }
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    .modal-sub {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+    .form-group input {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus { border-color: var(--java-orange); }
+    .modal-price-summary {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-price-summary .label { font-size: 0.85rem; color: var(--muted); }
+    .modal-price-summary .amount {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.3rem;
+      color: var(--java-orange);
+      font-weight: 700;
+    }
+    .modal-footer {
+      display: flex; gap: 12px; margin-top: 8px;
+    }
+    .modal-footer .cancel {
+      flex: 1; padding: 12px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--muted);
+      cursor: pointer;
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.9rem;
+      transition: border-color 0.2s;
+    }
+    .modal-footer .cancel:hover { border-color: var(--muted); }
+    .modal-footer .confirm {
+      flex: 2; padding: 12px;
+      background: linear-gradient(135deg, var(--java-orange), var(--java-red));
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      cursor: pointer;
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      transition: opacity 0.2s;
+    }
+    .modal-footer .confirm:hover { opacity: 0.9; }
+    .payment-methods {
+      display: flex; gap: 8px; margin-bottom: 20px;
+    }
+    .pm-opt {
+      flex: 1;
+      padding: 10px 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .pm-opt:hover, .pm-opt.active {
+      border-color: var(--java-orange);
+      color: var(--java-orange);
+    }
+    .pm-opt .pm-icon { font-size: 1.2rem; display: block; margin-bottom: 4px; }
+
+    /* TESTIMONIALS */
+    .testimonials {
+      padding: 100px 5%;
+      background: var(--bg);
+    }
+    .testi-header { text-align: center; margin-bottom: 60px; }
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .testi-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+    }
+    .stars { color: var(--java-orange); font-size: 0.85rem; margin-bottom: 16px; }
+    .testi-text {
+      font-size: 0.95rem;
+      color: var(--text);
+      line-height: 1.7;
+      margin-bottom: 20px;
+      font-weight: 300;
+    }
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+    .author-name { font-size: 0.9rem; font-weight: 600; }
+    .author-role { font-size: 0.75rem; color: var(--muted); }
+
+    /* FAQ */
+    .faq { padding: 100px 5%; background: var(--surface); }
+    .faq-header { text-align: center; margin-bottom: 60px; }
+    .faq-list { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .faq-q {
+      width: 100%;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 20px 24px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .faq-q .arrow { transition: transform 0.3s; color: var(--muted); flex-shrink: 0; }
+    .faq-item.open .faq-q .arrow { transform: rotate(180deg); }
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+    .faq-item.open .faq-a { max-height: 200px; }
+    .faq-a-inner { padding: 0 24px 20px; }
+
+    /* CTA BOTTOM */
+    .cta-bottom {
+      padding: 100px 5%;
+      background: var(--bg);
+      text-align: center;
+    }
+    .cta-box {
+      background: linear-gradient(135deg, rgba(248,152,32,0.08), rgba(230,74,25,0.08));
+      border: 1px solid rgba(248,152,32,0.2);
+      border-radius: 24px;
+      padding: 80px 40px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .cta-box h2 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+    .cta-box p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin-bottom: 36px;
+      font-weight: 300;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      position: relative; z-index: 1;
+    }
+    .footer-logo { font-family: 'Space Mono', monospace; font-size: 1rem; color: var(--java-orange); font-weight: 700; }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy { color: var(--muted); font-size: 0.8rem; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav ul { display: none; }
+      .hero-stats { gap: 28px; }
+      .code-float { display: none; }
+      .video-grid { grid-template-columns: 1fr; }
+      .modal { padding: 28px 20px; }
+    }
+
+    /* SCROLL REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo">Java<span>Master</span></div>
+    <ul>
+      <li><a href="#modulos">Módulos</a></li>
+      <li><a href="#video">Vista previa</a></li>
+      <li><a href="#precios">Precios</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#precios" class="nav-cta">Comprar ahora</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+
+    <!-- Floating code snippets -->
+    <div class="code-float left">
+      <div><span class="kw">public class</span> <span class="cls">HelloWorld</span> {</div>
+      <div>&nbsp;&nbsp;<span class="kw">public static void</span> main() {</div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="str">"Hola!"</span>);</div>
+      <div>&nbsp;&nbsp;}</div>
+      <div>}</div>
+    </div>
+    <div class="code-float right">
+      <div><span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; 10; i++) {</div>
+      <div>&nbsp;&nbsp;System.out.println(i);</div>
+      <div>}</div>
+    </div>
+
+    <div class="badge">🚀 Nuevo curso disponible</div>
+    <h1>Domina <span class="highlight">Java</span><br/>desde cero</h1>
+    <p class="hero-sub">Aprende a programar en Java con guías en PDF prácticas, claras. Sin experiencia previa. A tu ritmo. Módulo por módulo desde 0.</p>
+    <div class="hero-btns">
+      <a href="#precios" class="btn-primary">Comprar ahora →</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">4</div><div class="stat-label">Módulos</div></div>
+      <div class="stat"><div class="stat-num">350+</div><div class="stat-label">Estudiantes</div></div>
+      <div class="stat"><div class="stat-num">4.9★</div><div class="stat-label">Valoración</div></div>
+    </div>
+  </section>
+
+  <!-- PARA QUIÉN -->
+  <section style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:36px 5%;text-align:center;">
+    <p style="font-size:0.8rem;color:var(--java-orange);letter-spacing:3px;text-transform:uppercase;font-family:'Space Mono',monospace;margin-bottom:14px;">// ¿Para quién es este curso?</p>
+    <p style="font-size:1.05rem;color:var(--muted);max-width:700px;margin:0 auto;line-height:1.8;font-weight:300;">
+      Ideal para quienes se están preparando para carreras de 
+      <span style="color:var(--text);font-weight:500;">Ingeniería en Computación</span>, 
+      <span style="color:var(--text);font-weight:500;">Informática</span> o 
+      <span style="color:var(--text);font-weight:500;">Tecnologías de la Información</span> — 
+      y también para cualquiera que quiera aprender a programar desde cero, sin requisitos previos.
+    </p>
+  </section>
+
+  <!-- MODULES -->
+  <section class="modules" id="modulos">
+    <div class="modules-header reveal">
+      <div>
+        <div class="section-label">// Contenido del curso</div>
+        <h2 class="section-title">Cada módulo,<br/>un nuevo nivel</h2>
+      </div>
+      <p class="section-sub">Paga todo el curso por $20 USD o accedé a este Módulo por $3 USD.</p>
+    </div>
+    <div class="modules-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
+
+      <!-- MÓDULO 1 — ocupa todo el ancho -->
+      <div class="module-card reveal" style="grid-column: 1 / -1;" onclick="openModal('Módulo 1: Introducción a Java desde cero (8 PDFs)', 3, '')">
+        <div class="module-num">// MÓDULO 1 — DISPONIBLE AHORA</div>
+        <div class="module-icon">☕</div>
+        <div class="module-title">Introducción a Java desde cero</div>
+        <div class="module-desc">Todo lo que necesitás para empezar a programar en Java. 8 guías, ejemplos de código y ejercicios prácticos incluidos.</div>
+        <div class="module-topics">
+          <span class="topic-tag">Lenguajes de Programación</span>
+          <span class="topic-tag">JVM e IDE</span>
+          <span class="topic-tag">Instalación de Java</span>
+          <span class="topic-tag">IntelliJ + Primer Proyecto</span>
+          <span class="topic-tag">Variables y Tipos de Datos</span>
+          <span class="topic-tag">Operadores</span>
+          <span class="topic-tag">Operadores Matemáticos</span>
+          <span class="topic-tag">Funciones y Modularidad</span>
+        </div>
+        <div class="module-footer">
+          <div class="module-price">$3 <span>USD — 8 PDFs incluidos</span></div>
+          <button class="btn-primary" style="padding:12px 28px;font-size:0.95rem;">Comprar Módulo</button>
+        </div>
+      </div>
+
+      <!-- MÓDULO 2 — bloqueado -->
+      <div class="module-card reveal" style="opacity:0.45; pointer-events:none;">
+        <div class="module-num">// MÓDULO 2 — PRÓXIMAMENTE</div>
+        <div class="module-icon">🔒</div>
+        <div class="module-title">Próximamente</div>
+        <div class="module-desc">El Módulo 2 estará disponible pronto. Comprá el curso completo hoy y accedés a todos los módulos cuando salgan.</div>
+        <div class="module-topics"><span class="topic-tag">Disponible pronto</span></div>
+        <div class="module-footer">
+          <div class="module-price">— <span>próximamente</span></div>
+        </div>
+      </div>
+
+      <!-- MÓDULO 3 — bloqueado -->
+      <div class="module-card reveal" style="opacity:0.45; pointer-events:none;">
+        <div class="module-num">// MÓDULO 3 — PRÓXIMAMENTE</div>
+        <div class="module-icon">🔒</div>
+        <div class="module-title">Próximamente</div>
+        <div class="module-desc">Más módulos en camino. Comprá el curso completo para acceder a todo el contenido.</div>
+        <div class="module-topics"><span class="topic-tag">Disponible pronto</span></div>
+        <div class="module-footer">
+          <div class="module-price">— <span>próximamente</span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- VIDEO PREVIEW -->
+  <section class="video-section" id="video">
+    <div class="video-grid">
+      <div class="reveal">
+        <div class="video-placeholder" onclick="alert('Próximamente: agrega tu link de YouTube aquí')">
+          <div class="play-btn">▶</div>
+          <div class="video-label">Vista previa del Módulo 1<br/><span style="font-size:0.75rem;opacity:0.6">Haz clic para reproducir</span></div>
+          <div class="video-url-input">📎 Pega tu link de YouTube aquí</div>
+        </div>
+      </div>
+      <div class="video-info reveal">
+        <div class="section-label">// Vista previa</div>
+        <h3>Ve antes de comprar</h3>
+        <p>Cada módulo incluye una clase de introducción gratuita para que sepas exactamente qué vas a aprender antes de hacer tu compra.</p>
+        <ul class="checklist">
+          <li>PDF descargable en alta calidad</li>
+          <li>Ejemplos de código listos para copiar</li>
+          <li>Ejercicios con soluciones incluidas</li>
+          <li>Acceso de por vida al módulo</li>
+          <li>Actualizaciones gratuitas</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing" id="precios">
+    <div class="pricing-header reveal">
+      <div class="section-label">// Planes</div>
+      <h2 class="section-title">Elige tu camino</h2>
+      <p class="section-sub">Paga por módulo suelto o ahorra con el paquete completo.</p>
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-top:20px;flex-wrap:wrap;">
+        <span style="font-size:0.78rem;color:var(--muted);">Pagos seguros con:</span>
+        <span style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:0.78rem;color:var(--text);">💳 Visa</span>
+        <span style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:0.78rem;color:var(--text);">💳 Mastercard</span>
+        <span style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:0.78rem;color:var(--text);">💳 Débito</span>
+        <span style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:0.78rem;color:var(--text);">🅿️ PayPal</span>
+        <span style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:0.78rem;color:var(--java-orange);">🏦 MercadoPago</span>
+      </div>
+    </div>
+    <div class="pricing-grid" style="max-width:700px;margin:0 auto;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));">
+      <div class="price-card reveal">
+        <div class="plan-name">Por módulo</div>
+        <div class="plan-price"><sup>$</sup>3<sub> USD</sub></div>
+        <p class="plan-desc">Accedé a un módulo completo con todos sus PDFs incluidos.</p>
+        <ul class="plan-features">
+          <li><span class="icon">✓</span> PDFs del módulo completo</li>
+          <li><span class="icon">✓</span> Ejemplos y ejercicios</li>
+          <li><span class="icon">✓</span> Acceso de por vida</li>
+          <li class="disabled"><span class="icon">✗</span> Módulos futuros incluidos</li>
+          <li class="disabled"><span class="icon">✗</span> Ejercicios prácticos extra</li>
+        </ul>
+        <button class="pay-btn outline" onclick="openModal('Módulo 1: Introducción a Java', 3, '')">Comprar este Módulo</button>
+      </div>
+
+      <div class="price-card featured reveal">
+        <div class="featured-badge">⭐ Mejor valor</div>
+        <div class="plan-name">Curso completo</div>
+        <div class="plan-price"><sup>$</sup>20<sub> USD</sub></div>
+        <p class="plan-desc">Los 5 módulos del curso completo + todos los módulos y ejercicios prácticos futuros incluidos.</p>
+        <ul class="plan-features">
+          <li><span class="icon">✓</span> Los 5 módulos completos</li>
+          <li><span class="icon">✓</span> Todos los módulos futuros</li>
+          <li><span class="icon">✓</span> Ejercicios prácticos incluidos</li>
+          <li><span class="icon">✓</span> Acceso de por vida</li>
+          <li><span class="icon">✓</span> Actualizaciones sin costo extra</li>
+        </ul>
+        <button class="pay-btn primary" onclick="openModal('Curso Completo de Java', 20, '')">Comprar curso completo</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials">
+    <div class="testi-header reveal">
+      <div class="section-label">// Testimonios</div>
+      <h2 class="section-title">Lo que dicen nuestros estudiantes</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Empecé sin saber nada de programación y con el módulo 1 ya estaba escribiendo mi primer programa. Los PDFs son clarísimos."</p>
+        <div class="testi-author">
+          <div class="avatar" style="background:rgba(248,152,32,0.15);color:var(--java-orange)">MR</div>
+          <div><div class="author-name">Martín Rodríguez</div><div class="author-role">Estudiante universitario</div></div>
+        </div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Compré el pack completo y fue la mejor inversión. En 3 semanas ya tenía conocimientos suficientes para mi primer trabajo."</p>
+        <div class="testi-author">
+          <div class="avatar" style="background:rgba(88,166,255,0.15);color:var(--accent)">SL</div>
+          <div><div class="author-name">Sofía López</div><div class="author-role">Desarrolladora junior</div></div>
+        </div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"El módulo de POO me costaba mucho en otras plataformas. Aquí lo entendí al primer intento. Los ejercicios son excelentes."</p>
+        <div class="testi-author">
+          <div class="avatar" style="background:rgba(63,185,80,0.15);color:var(--green)">AC</div>
+          <div><div class="author-name">Alejandro Cruz</div><div class="author-role">Analista de sistemas</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq" id="faq">
+    <div class="faq-header reveal">
+      <div class="section-label">// Preguntas frecuentes</div>
+      <h2 class="section-title">¿Tienes dudas?</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          ¿Necesito experiencia previa en programación?
+          <span class="arrow">▼</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">No, el Módulo 1 está diseñado para personas sin ningún conocimiento previo. Vamos desde cero absoluto.</div></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          ¿Cómo recibo los PDFs después de pagar?
+          <span class="arrow">▼</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">Una vez confirmado el pago, recibirás un email con el link de descarga en menos de 5 minutos.</div></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          ¿Puedo comprar módulos sueltos?
+          <span class="arrow">▼</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">Sí, cada módulo tiene un precio fijo de $3 USD con todos sus PDFs incluidos.</div></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          ¿Hay garantía de devolución?
+          <span class="arrow">▼</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">Sí, ofrecemos garantía de devolución de 7 días. Si no quedas satisfecho, te devolvemos el 100% sin preguntas.</div></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          ¿En qué idioma están los PDFs?
+          <span class="arrow">▼</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">Todos los contenidos están en español, con explicaciones claras y ejemplos adaptados a hispanohablantes.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BOTTOM -->
+  <section class="cta-bottom">
+    <div class="cta-box reveal">
+      <h2>¿Listo para aprender <span style="background:linear-gradient(135deg,var(--java-orange),var(--java-red));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Java</span>?</h2>
+      <p>Únete a más de 500 estudiantes que ya están construyendo su futuro en tecnología.</p>
+      <button class="btn-primary" onclick="openModal('Curso Completo de Java', 20, '')" style="font-size:1.1rem;padding:18px 44px;">Empezar desde $3 →</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Java<span style="color:var(--text)">Master</span></div>
+    <div class="footer-links">
+      <a href="#">Términos</a>
+      <a href="#">Privacidad</a>
+      <a href="#">Contacto</a>
+    </div>
+    <div class="footer-copy">© 2026 JavaMaster. Todos los derechos reservados.</div>
+  </footer>
+
+  <!-- PAYMENT MODAL -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+    <div class="modal">
+      <h2 class="modal-title">Completar compra</h2>
+      <p class="modal-sub" id="modalSubtitle">Módulo 1: Fundamentos de Java</p>
+
+      <div class="modal-price-summary">
+        <div class="label">Total a pagar</div>
+        <div class="amount" id="modalAmount">$3 USD</div>
+      </div>
+
+      <div class="form-group">
+        <label>NOMBRE COMPLETO</label>
+        <input type="text" placeholder="Ej: Juan García" id="modalName" />
+      </div>
+      <div class="form-group">
+        <label>EMAIL</label>
+        <input type="email" placeholder="tu@email.com" id="modalEmail" />
+      </div>
+
+      <div class="form-group">
+        <label>MÉTODO DE PAGO</label>
+        <div class="payment-methods">
+          <div class="pm-opt active" onclick="selectPM(this)"><span class="pm-icon">💳</span>Tarjeta</div>
+          <div class="pm-opt" onclick="selectPM(this)"><span class="pm-icon">🅿️</span>PayPal</div>
+          <div class="pm-opt" onclick="selectPM(this)"><span class="pm-icon"><img src="https://http2.mlstatic.com/frontend-assets/mp-web-navigation/ui-navigation/5.21.22/mercadopago/logo__large@2x.png" style="height:16px;filter:brightness(0) invert(1);vertical-align:middle;"/></span>MercadoPago</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:10px 14px;background:rgba(63,185,80,0.06);border:1px solid rgba(63,185,80,0.15);border-radius:8px;">
+          <span style="font-size:1rem;">✅</span>
+          <span style="font-size:0.78rem;color:var(--muted);line-height:1.4;">Se aceptan <strong style="color:var(--text);">todas las tarjetas</strong> — crédito y débito: Visa, Mastercard, OCA y más. También transferencia bancaria.</span>
+        </div>
+      </div>
+
+      <div class="form-group" id="cardFields">
+        <label>NÚMERO DE TARJETA</label>
+        <input type="text" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCard(this)" />
+        <div style="display:flex;gap:12px;margin-top:12px">
+          <input type="text" placeholder="MM/AA" style="flex:1;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px 16px;color:var(--text);font-family:'Barlow',sans-serif;font-size:.95rem;outline:none;" />
+          <input type="text" placeholder="CVV" style="flex:1;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px 16px;color:var(--text);font-family:'Barlow',sans-serif;font-size:.95rem;outline:none;" />
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="cancel" onclick="closeModal()">Cancelar</button>
+        <button class="confirm" onclick="processPayment()">🔒 Pagar ahora</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MercadoPago SDK -->
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script>
+    // ── EmailJS ───────────────────────────────────────────────
+    emailjs.init('GALEz5vuJB01ebK-D');
+
+    // ── MercadoPago ──────────────────────────────────────────
+    const MP_PUBLIC_KEY = 'APP_USR-a5816247-e3aa-424f-b4fa-43a6b5e894b6';
+    const MP_ACCESS_TOKEN = 'APP_USR-3242265758694321-030422-ea22eea698ab3bcb0550a50f28a665f3-2126395795';
+    const mp = new MercadoPago(MP_PUBLIC_KEY, { locale: 'es-UY' });
+
+    // ── Links de los PDFs por producto ────────────────────────
+    const CONTENIDO = {
+      modulo1: `📘 Módulo 1 — Introducción a Java desde cero\n\n` +
+        `1. Lenguajes de Programación → https://drive.google.com/file/d/1Q8-sSkOrVH_SPJfoQoBxJhnyzR13pV-v/view\n` +
+        `2. JVM e IDE → https://drive.google.com/file/d/1zR5-me2BlN2uD5wNMrfuYkN7kGmhV1-W/view\n` +
+        `3. Instalación de Java → https://drive.google.com/file/d/1IaOlevCYodsm9auuwy1hwo2ce7Y2Ul35/view\n` +
+        `4. IntelliJ + Primer Proyecto → https://drive.google.com/file/d/1KMDWnXrG7j18Y2w_d08xYwqPKcJMTcKT/view\n` +
+        `5. Variables y Tipos de Datos → https://drive.google.com/file/d/1k6Ul09eMse2HUxG_s-uRmDtcU8DxmWXN/view\n` +
+        `6. Operadores → https://drive.google.com/file/d/1V97rvDSp92xMzukIlKyt4IY5oQkxjrGt/view\n` +
+        `7. Operadores Matemáticos → https://drive.google.com/file/d/1oPyw9fQc8Z5wlYoRzwvPbxyPvn9xnDtm/view\n` +
+        `8. Funciones y Modularidad → https://drive.google.com/file/d/1P4LfketZED7IudJ92sw8zGPwWjRmY537/view`
+    };
+
+    // ── Datos del comprador guardados antes del pago ──────────
+    let buyerName = '';
+    let buyerEmail = '';
+
+    // ── MODAL ────────────────────────────────────────────────
+    let currentProduct = '';
+    let currentPrice = 0;
+    let currentPdfLink = '';
+
+    function openModal(product, price, pdfLink) {
+      currentProduct = product;
+      currentPrice = price;
+      currentPdfLink = pdfLink || '';
+      document.getElementById('modalSubtitle').textContent = product;
+      document.getElementById('modalAmount').textContent = '$' + price + ' USD';
+      document.getElementById('modalOverlay').classList.add('open');
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('open');
+    }
+
+    function closeModalOutside(e) {
+      if (e.target === document.getElementById('modalOverlay')) closeModal();
+    }
+
+    function selectPM(el) {
+      document.querySelectorAll('.pm-opt').forEach(e => e.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    function formatCard(input) {
+      let v = input.value.replace(/\D/g, '').substring(0, 16);
+      input.value = v.match(/.{1,4}/g)?.join(' ') || v;
+    }
+
+    // ── PAGO REAL con MercadoPago Checkout Pro ────────────────
+    async function processPayment() {
+      const name = document.getElementById('modalName').value.trim();
+      const email = document.getElementById('modalEmail').value.trim();
+      if (!name || !email) {
+        alert('Por favor completá tu nombre y email.');
+        return;
+      }
+
+      // Guardar datos del comprador en localStorage para usar al volver
+      localStorage.setItem('buyer_name', name);
+      localStorage.setItem('buyer_email', email);
+      localStorage.setItem('buyer_product', currentProduct);
+
+      const confirmBtn = document.querySelector('.modal-footer .confirm');
+      confirmBtn.textContent = '⏳ Procesando...';
+      confirmBtn.disabled = true;
+
+      try {
+        const response = await fetch('https://api.mercadopago.com/checkout/preferences', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${MP_ACCESS_TOKEN}`
+          },
+          body: JSON.stringify({
+            items: [{
+              title: currentProduct,
+              quantity: 1,
+              currency_id: 'USD',
+              unit_price: currentPrice
+            }],
+            payer: { name, email },
+            back_urls: {
+              success: 'https://javamaster-uy.github.io/javamaster?status=success',
+              failure: 'https://javamaster-uy.github.io/javamaster?status=failure',
+              pending: 'https://javamaster-uy.github.io/javamaster?status=pending'
+            },
+            auto_return: 'approved',
+            statement_descriptor: 'JAVAMASTER'
+          })
+        });
+
+        const data = await response.json();
+        if (data.init_point) {
+          closeModal();
+          window.location.href = data.init_point;
+        } else {
+          throw new Error('No se pudo crear la preferencia');
+        }
+      } catch (err) {
+        confirmBtn.textContent = '🔒 Pagar ahora';
+        confirmBtn.disabled = false;
+        alert('Hubo un problema al conectar con MercadoPago. Intentá de nuevo.');
+        console.error(err);
+      }
+    }
+
+    // ── Mostrar contenido desbloqueado ────────────────────────
+    function mostrarContenido(product) {
+      // Determinar qué contenido mostrar
+      let contenidoHTML = '';
+      const esCompleto = product && product.toLowerCase().includes('completo');
+      const links = [
+        { titulo: 'Lenguajes de Programación', url: 'https://drive.google.com/file/d/1Q8-sSkOrVH_SPJfoQoBxJhnyzR13pV-v/view' },
+        { titulo: 'JVM e IDE', url: 'https://drive.google.com/file/d/1zR5-me2BlN2uD5wNMrfuYkN7kGmhV1-W/view' },
+        { titulo: 'Instalación de Java', url: 'https://drive.google.com/file/d/1IaOlevCYodsm9auuwy1hwo2ce7Y2Ul35/view' },
+        { titulo: 'IntelliJ + Primer Proyecto', url: 'https://drive.google.com/file/d/1KMDWnXrG7j18Y2w_d08xYwqPKcJMTcKT/view' },
+        { titulo: 'Variables y Tipos de Datos', url: 'https://drive.google.com/file/d/1k6Ul09eMse2HUxG_s-uRmDtcU8DxmWXN/view' },
+        { titulo: 'Operadores', url: 'https://drive.google.com/file/d/1V97rvDSp92xMzukIlKyt4IY5oQkxjrGt/view' },
+        { titulo: 'Operadores Matemáticos', url: 'https://drive.google.com/file/d/1oPyw9fQc8Z5wlYoRzwvPbxyPvn9xnDtm/view' },
+        { titulo: 'Funciones y Modularidad', url: 'https://drive.google.com/file/d/1P4LfketZED7IudJ92sw8zGPwWjRmY537/view' }
+      ];
+
+      contenidoHTML = `
+        <div style="position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px;">
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;max-width:600px;width:100%;padding:40px;max-height:90vh;overflow-y:auto;">
+            <div style="text-align:center;margin-bottom:30px;">
+              <div style="font-size:2.5rem;">✅</div>
+              <h2 style="color:var(--green);margin:10px 0 6px;">¡Pago confirmado!</h2>
+              <p style="color:var(--muted);font-size:0.9rem;">También te enviamos los links a tu email.</p>
+            </div>
+            <div style="font-size:0.8rem;color:var(--java-orange);letter-spacing:2px;text-transform:uppercase;font-family:'Space Mono',monospace;margin-bottom:16px;">// MÓDULO 1 — TU MATERIAL</div>
+            ${links.map((l, i) => `
+              <a href="${l.url}" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 16px;margin-bottom:10px;background:var(--surface);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text);transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--java-orange)'" onmouseout="this.style.borderColor='var(--border)'">
+                <span style="background:var(--java-orange);color:#000;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0;">${i+1}</span>
+                <span style="font-weight:500;">${l.titulo}</span>
+                <span style="margin-left:auto;color:var(--muted);font-size:0.8rem;">Ver PDF →</span>
+              </a>`).join('')}
+            <button onclick="this.parentElement.parentElement.parentElement.remove()" style="width:100%;margin-top:20px;padding:14px;background:var(--java-orange);color:#000;border:none;border-radius:10px;font-weight:700;font-size:1rem;cursor:pointer;">Cerrar</button>
+          </div>
+        </div>`;
+
+      document.body.insertAdjacentHTML('beforeend', contenidoHTML);
+    }
+
+    // ── Detectar retorno desde MercadoPago ────────────────────
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const status = params.get('status');
+
+      if (status === 'success') {
+        const name = localStorage.getItem('buyer_name') || 'Estudiante';
+        const email = localStorage.getItem('buyer_email') || '';
+        const product = localStorage.getItem('buyer_product') || 'Módulo 1';
+
+        // Mostrar contenido desbloqueado
+        mostrarContenido(product);
+
+        // Enviar email con EmailJS
+        if (email) {
+          const contenidoEmail = CONTENIDO.modulo1;
+          emailjs.send('service_cc3tjwf', 'template_37e6vgl', {
+            to_name: name,
+            to_email: email,
+            content: contenidoEmail
+          }).then(() => {
+            console.log('Email enviado ✅');
+          }).catch(err => {
+            console.error('Error enviando email:', err);
+          });
+        }
+
+        // Limpiar localStorage
+        localStorage.removeItem('buyer_name');
+        localStorage.removeItem('buyer_email');
+        localStorage.removeItem('buyer_product');
+
+      } else if (status === 'failure') {
+        setTimeout(() => {
+          alert('❌ El pago no se completó. Podés intentarlo de nuevo cuando quieras.');
+        }, 500);
+      } else if (status === 'pending') {
+        setTimeout(() => {
+          alert('⏳ Tu pago está pendiente. Te avisaremos por email cuando se acredite.');
+        }, 500);
+      }
+    });
+
+    // ── FAQ TOGGLE ────────────────────────────────────────────
+    function toggleFaq(btn) {
+      const item = btn.parentElement;
+      item.classList.toggle('open');
+    }
+
+    // ── SCROLL REVEAL ─────────────────────────────────────────
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
+
+    // Datos de los productos con sus links de Drive
+    const PRODUCTOS = {
+      'Módulo 1: Introducción a Java': {
+        price: 3,
+        pdfLink: '' // se abre al finalizar la compra desde MP
+      },
+      'Curso Completo de Java': {
+        price: 20,
+        pdfLink: ''
+      }
+    };
+
+    // ── MODAL ────────────────────────────────────────────────
+    let currentProduct = '';
+    let currentPrice = 0;
+    let currentPdfLink = '';
+
+    function openModal(product, price, pdfLink) {
+      currentProduct = product;
+      currentPrice = price;
+      currentPdfLink = pdfLink || '';
+      document.getElementById('modalSubtitle').textContent = product;
+      document.getElementById('modalAmount').textContent = '$' + price + ' USD';
+      document.getElementById('modalOverlay').classList.add('open');
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('open');
+    }
+
+    function closeModalOutside(e) {
+      if (e.target === document.getElementById('modalOverlay')) closeModal();
+    }
+
+    function selectPM(el) {
+      document.querySelectorAll('.pm-opt').forEach(e => e.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    function formatCard(input) {
+      let v = input.value.replace(/\D/g, '').substring(0, 16);
+      input.value = v.match(/.{1,4}/g)?.join(' ') || v;
+    }
+
+    // ── PAGO REAL con MercadoPago Checkout Pro ────────────────
+    async function processPayment() {
+      const name = document.getElementById('modalName').value.trim();
+      const email = document.getElementById('modalEmail').value.trim();
+      if (!name || !email) {
+        alert('Por favor completá tu nombre y email.');
+        return;
+      }
+
+      const confirmBtn = document.querySelector('.modal-footer .confirm');
+      confirmBtn.textContent = '⏳ Procesando...';
+      confirmBtn.disabled = true;
+
+      try {
+        // Crear preferencia de pago en MercadoPago
+        const response = await fetch('https://api.mercadopago.com/checkout/preferences', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${MP_ACCESS_TOKEN}`
+          },
+          body: JSON.stringify({
+            items: [{
+              title: currentProduct,
+              quantity: 1,
+              currency_id: 'USD',
+              unit_price: currentPrice
+            }],
+            payer: { name, email },
+            back_urls: {
+              success: 'https://javamaster-uy.github.io/javamaster?status=success',
+              failure: 'https://javamaster-uy.github.io/javamaster?status=failure',
+              pending: 'https://javamaster-uy.github.io/javamaster?status=pending'
+            },
+            auto_return: 'approved',
+            statement_descriptor: 'JAVAMASTER'
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.init_point) {
+          closeModal();
+          // Redirigir al checkout de MercadoPago
+          window.location.href = data.init_point;
+        } else {
+          throw new Error('No se pudo crear la preferencia');
+        }
+      } catch (err) {
+        confirmBtn.textContent = '🔒 Pagar ahora';
+        confirmBtn.disabled = false;
+        alert('Hubo un problema al conectar con MercadoPago. Intentá de nuevo.');
+        console.error(err);
+      }
+    }
+
+    // ── Detectar retorno desde MercadoPago ────────────────────
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const status = params.get('status');
+      if (status === 'success') {
+        setTimeout(() => {
+          alert('✅ ¡Pago confirmado! Revisá tu email para acceder al material. ¡Gracias por confiar en JavaMaster!');
+        }, 500);
+      } else if (status === 'failure') {
+        setTimeout(() => {
+          alert('❌ El pago no se completó. Podés intentarlo de nuevo cuando quieras.');
+        }, 500);
+      } else if (status === 'pending') {
+        setTimeout(() => {
+          alert('⏳ Tu pago está pendiente de confirmación. Te avisaremos por email cuando se acredite.');
+        }, 500);
+      }
+    });
+
+    // ── FAQ TOGGLE ────────────────────────────────────────────
+    function toggleFaq(btn) {
+      const item = btn.parentElement;
+      item.classList.toggle('open');
+    }
+
+    // ── SCROLL REVEAL ─────────────────────────────────────────
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
